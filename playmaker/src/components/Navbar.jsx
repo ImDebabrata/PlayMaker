@@ -13,9 +13,13 @@ import {
   Divider,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+
+  const { token } = useSelector((store) => store.auth);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -47,33 +51,73 @@ const Navbar = () => {
           >
             Playmaker
           </StyledTypography>
-          <div>
-            <StyledButton color="inherit">Login</StyledButton>
-            <StyledButton color="inherit">Signup</StyledButton>
-            <StyledButton color="inherit">Events</StyledButton>
-            <StyledButton color="inherit">Accept/Request</StyledButton>
-            <StyledButton color="inherit">Logout</StyledButton>
-          </div>
+          <RowLinks>
+            {!token ? (
+              <>
+                {" "}
+                <Link to={"/"}>
+                  <StyledButton color="inherit">Link</StyledButton>
+                </Link>
+                <Link to={"/register"}>
+                  <StyledButton color="inherit">Signup</StyledButton>
+                </Link>
+              </>
+            ) : (
+              <>
+                {" "}
+                <Link to={"/events"}>
+                  <StyledButton color="inherit">Events</StyledButton>
+                </Link>
+                <Link to={"/addevent"}>
+                  <StyledButton color="inherit">Add Events</StyledButton>
+                </Link>
+                <Link to={"/logs"}>
+                  <StyledButton color="inherit">Accept/Request</StyledButton>
+                </Link>
+                <StyledButton color="inherit">Logout</StyledButton>
+              </>
+            )}
+          </RowLinks>
         </StyledToolbar>
       </StyledNavbar>
       <Drawer anchor="left" open={isDrawerOpen} onClose={toggleDrawer(false)}>
         <DrawerList>
-          <ListItem button>
-            <ListItemText primary="Login" />
-          </ListItem>
-          <ListItem button>
-            <ListItemText primary="Signup" />
-          </ListItem>
-          <ListItem button>
-            <ListItemText primary="Events" />
-          </ListItem>
-          <ListItem button>
-            <ListItemText primary="Accept/Request" />
-          </ListItem>
-          <Divider />
-          <ListItem button>
-            <ListItemText primary="Logout" />
-          </ListItem>
+          {!token ? (
+            <>
+              <ListItem button>
+                <Link to={"/"}>
+                  <ListItemText primary="Login" />
+                </Link>
+              </ListItem>
+              <ListItem button>
+                <Link to={"/register"}>
+                  <ListItemText primary="Signup" />
+                </Link>
+              </ListItem>
+            </>
+          ) : (
+            <>
+              <ListItem button>
+                <Link to={"/events"}>
+                  <ListItemText primary="Events" />
+                </Link>
+              </ListItem>
+              <ListItem button>
+                <Link to={"/addevent"}>
+                  <ListItemText primary="Add Event" />
+                </Link>
+              </ListItem>
+              <ListItem button>
+                <Link to={"/logs"}>
+                  <ListItemText primary="Accept/Request" />
+                </Link>
+              </ListItem>
+              <Divider />
+              <ListItem button>
+                <ListItemText primary="Logout" />
+              </ListItem>
+            </>
+          )}
         </DrawerList>
       </Drawer>
     </>
@@ -126,6 +170,12 @@ const DrawerList = styled(List)`
 const StyledToolbar = styled(Toolbar)`
   && {
     justify-content: space-between;
+  }
+`;
+
+const RowLinks = styled.div`
+  > a {
+    color: white !important;
   }
 `;
 
