@@ -27,8 +27,20 @@ export const apiSlice = createApi({
         url: "/event",
       }),
     }),
+    //Create new event
+    addEvents: builder.mutation({
+      query: (payload) => ({
+        url: "/event",
+        method: "POST",
+        body: payload,
+      }),
+    }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation, useEventsQuery } =
-  apiSlice;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useEventsQuery,
+  useAddEventsMutation,
+} = apiSlice;
