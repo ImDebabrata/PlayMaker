@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const EventSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    require: true,
+  },
   description: {
     type: String,
     require: true,
@@ -15,13 +19,19 @@ const EventSchema = new mongoose.Schema({
   },
   organizer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "user",
     required: true,
   },
   players: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "user",
+    },
+  ],
+  waitingList: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
     },
   ],
 });

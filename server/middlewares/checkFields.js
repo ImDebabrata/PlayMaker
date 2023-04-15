@@ -7,4 +7,13 @@ const userFields = (req, res, next) => {
   next();
 };
 
-module.exports = { userFields };
+//Checking for event fields;
+const eventFields = (req, res, next) => {
+  const { description, timings, playerLimit, name } = req.body;
+  if (!description || !timings || !playerLimit || !name) {
+    return res.status(400).send({ res: "Please input all the fields" });
+  }
+  next();
+};
+
+module.exports = { userFields, eventFields };

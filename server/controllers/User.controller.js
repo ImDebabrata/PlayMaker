@@ -38,7 +38,7 @@ const login = async (req, res) => {
     bcrypt.compare(password, hashedPassword, (err, result) => {
       if (result) {
         const token = jwt.sign(
-          { email: isExist.username, userID: isExist._id },
+          { username: isExist.username, userID: isExist._id },
           "webtoken"
         );
         res.send({ res: `Hello ${isExist.username}`, token });
