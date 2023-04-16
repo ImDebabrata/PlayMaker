@@ -6,16 +6,45 @@ import Events from "./Events";
 import AcceptRequest from "./AcceptRequest";
 import AddEventForm from "./AddEvent";
 import EventDetails from "./EventDetails";
+import PrivateRoute from "./PrivateRoute";
 
 const AllRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Signup />} />
-      <Route path="/events" element={<Events />} />
-      <Route path="/events/:eventId" element={<EventDetails />} />
-      <Route path="/addevent" element={<AddEventForm />} />
-      <Route path="/logs" element={<AcceptRequest />} />
+      <Route
+        path="/events"
+        element={
+          <PrivateRoute>
+            <Events />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/events/:eventId"
+        element={
+          <PrivateRoute>
+            <EventDetails />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/addevent"
+        element={
+          <PrivateRoute>
+            <AddEventForm />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/logs"
+        element={
+          <PrivateRoute>
+            <AcceptRequest />
+          </PrivateRoute>
+        }
+      />
     </Routes>
   );
 };
