@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   useAcceptPlayerMutation,
@@ -23,7 +23,13 @@ const EventDetails = () => {
   const [applyEvent] = useApplyEventMutation();
   const [acceptPlayer] = useAcceptPlayerMutation();
   const [rejectPlayer] = useRejectPlayerMutation();
-  const { data, isLoading, isError } = useEventsByIdQuery({ eventId, token });
+  const { data, isLoading, isError, refetch } = useEventsByIdQuery({
+    eventId,
+    token,
+  });
+  useEffect(() => {
+    refetch();
+  }, []);
   // const events = data?.event || [];
 
   const handleJoinClick = () => {

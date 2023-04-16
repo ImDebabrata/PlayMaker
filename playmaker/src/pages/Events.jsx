@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import {
   Grid,
@@ -63,8 +63,10 @@ export const EventGrid = styled(Grid)`
 
 const Events = () => {
   const { token } = useSelector((store) => store.auth);
-  const { data, isLoading, isError } = useEventsQuery(token);
+  const { data, isLoading, isError, refetch } = useEventsQuery(token);
+  console.log("data:", data);
   const eventList = data?.events || [];
+  console.log("eventList:", eventList);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("playerLimit");
 
@@ -83,6 +85,10 @@ const Events = () => {
   const filteredEventList = sortedEventList.filter((event) =>
     event.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   return (
     <EventPageWrapper>

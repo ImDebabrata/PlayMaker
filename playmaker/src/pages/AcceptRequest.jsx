@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useApplyEventLogQuery } from "../redux/apiSlice";
 import { useSelector } from "react-redux";
 import { Container, Grid, Typography } from "@mui/material";
@@ -7,10 +7,14 @@ import { EventGrid } from "./Events";
 
 const AcceptRequest = () => {
   const { token, user } = useSelector((store) => store.auth);
-  const { data, isLoading, isError } = useApplyEventLogQuery({
+  const { data, isLoading, isError, refetch } = useApplyEventLogQuery({
     token,
     userId: user?.userID,
   });
+
+  useEffect(() => {
+    refetch();
+  }, []);
   return (
     <Container maxWidth="md">
       <Typography variant="h5">Accepted</Typography>
