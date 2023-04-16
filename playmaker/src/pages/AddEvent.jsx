@@ -39,7 +39,8 @@ const AddEventForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Handle form submit logic here
-    addEvents({ name, description, timings: dateTime, playerLimit, token })
+    const payload = { name, description, timings: dateTime, playerLimit };
+    addEvents({ payload, token })
       .unwrap()
       .then((res) => alert(res.res))
       .catch((err) => alert(err.data.res));

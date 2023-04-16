@@ -33,7 +33,7 @@ export const apiSlice = createApi({
     }),
     //Create new event
     addEvents: builder.mutation({
-      query: (payload, token) => ({
+      query: ({ payload, token }) => ({
         url: "/event",
         method: "POST",
         body: payload,
