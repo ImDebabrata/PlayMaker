@@ -143,6 +143,39 @@ const rejectPlayer = async (req, res) => {
   }
 };
 
+const eventByUserId = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const events = await EventModel.find({
+      $or: [{ waitingList: userId }, { players: userId }],
+    })
+      .populate("organizer", "username")
+      .populate({
+        path: "waitingList",
+        select: "username",
+        match: { _id: userId },
+      })
+      .populate({
+        path: "players",
+        select: "username",
+        match: { _id: userId },
+      })
+      .exec();
+
+    const acceptedEvents = events.filter((event) =>
+      event.players.find((player) => player._id.toString() === userId)
+    );
+    const pendingEvents = events.filter((event) =>
+      event.waitingList.find((player) => player._id.toString() === userId)
+    );
+
+    res.send({ res: "Get Events", acceptedEvents, pendingEvents });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ res: "Server error", error });
+  }
+};
+
 module.exports = {
   event,
   eventById,
@@ -150,4 +183,5 @@ module.exports = {
   applyEvent,
   acceptPlayer,
   rejectPlayer,
+  eventByUserId,
 };
