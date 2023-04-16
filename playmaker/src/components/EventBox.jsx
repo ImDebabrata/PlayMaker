@@ -7,8 +7,8 @@ import { useSelector } from "react-redux";
 const StyledCard = styled(Card)`
   && {
     height: 100%;
-    border-top: ${(style) => style.borderVarient || "5px solid red"};
-    border-bottom: ${(style) => style.borderVarient || "5px solid red"};
+    border-top: ${(style) => style.bordervarient || "1px solid red"};
+    border-bottom: ${(style) => style.bordervarient || "1px solid red"};
   }
 `;
 
@@ -43,7 +43,7 @@ const EventBox = ({
   };
   return (
     <StyledCard
-      borderVarient={user.userID === organizer_id && "5px solid green"}
+      bordervarient={user?.userID === organizer_id && "5px solid green"}
       onClick={handleNavigate}
       variant="outlined"
     >
@@ -56,7 +56,7 @@ const EventBox = ({
         </Typography>
         <Typography variant="subtitle1" sx={{ mt: "auto" }}>
           Organizer: {organizer}
-          {user.userID === organizer_id && " (Created By Me)"}
+          {user?.userID === organizer_id && " (Created By Me)"}
         </Typography>
         <Typography variant="subtitle1">Player Limit: {playerLimit}</Typography>
         <Typography variant="subtitle1">
