@@ -1,7 +1,12 @@
 const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
-  const { token } = req.body;
+  // const { token } = req.body;
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).send({ res: "Authorization Error" });
+  }
+  const token = authHeader.split(" ")[1];
   //Verifying token
   jwt.verify(token, "webtoken", async function (err, decoded) {
     if (err) {

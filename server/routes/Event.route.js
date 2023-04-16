@@ -7,12 +7,14 @@ const {
   applyEvent,
   acceptPlayer,
   rejectPlayer,
+  eventById,
 } = require("../controllers/Event.controller");
 //Importing middlewares
 const { eventFields } = require("../middlewares/checkFields");
 const { verifyToken } = require("../middlewares/verifyToken");
 
 EventRoute.get("/", event);
+EventRoute.get("/:eventId", verifyToken, eventById);
 EventRoute.post("/", eventFields, verifyToken, createEvent);
 EventRoute.post("/:eventId/apply", verifyToken, applyEvent);
 EventRoute.post("/:eventId/accept/:userId", verifyToken, acceptPlayer);

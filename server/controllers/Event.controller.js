@@ -11,6 +11,23 @@ const event = async (req, res) => {
   }
 };
 
+const eventById = async (req, res) => {
+  // const { user } = req.body;
+  const { eventId } = req.params;
+  try {
+    const getEvent = await EventModel.findById(eventId).populate(
+      "organizer",
+      "username"
+    );
+    if (!getEvent) {
+      return res.status(404).send({ res: "Event not found!" });
+    }
+    return res.send({ res: "Get event Successfully", event: getEvent });
+  } catch (error) {
+    res.send({ res: "Something went wrong", error });
+  }
+};
+
 //Create new event
 const createEvent = async (req, res) => {
   const { name, description, timings, playerLimit, user } = req.body;
@@ -126,4 +143,11 @@ const rejectPlayer = async (req, res) => {
   }
 };
 
-module.exports = { event, createEvent, applyEvent, acceptPlayer, rejectPlayer };
+module.exports = {
+  event,
+  eventById,
+  createEvent,
+  applyEvent,
+  acceptPlayer,
+  rejectPlayer,
+};
