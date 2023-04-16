@@ -15,10 +15,10 @@ const eventById = async (req, res) => {
   // const { user } = req.body;
   const { eventId } = req.params;
   try {
-    const getEvent = await EventModel.findById(eventId).populate(
-      "organizer",
-      "username"
-    );
+    const getEvent = await EventModel.findById(eventId)
+      .populate("organizer", "username")
+      .populate("players", "username")
+      .populate("waitingList", "username");
     if (!getEvent) {
       return res.status(404).send({ res: "Event not found!" });
     }
