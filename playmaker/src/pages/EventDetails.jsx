@@ -13,14 +13,13 @@ import {
   Card,
   CardContent,
   Container,
-  Grid,
   Typography,
 } from "@mui/material";
 
 const EventDetails = () => {
   const [eventInfo, setEventInfo] = useState(null);
   const { eventId } = useParams();
-  const { token } = useSelector((store) => store.auth);
+  const { token, user } = useSelector((store) => store.auth);
   const [applyEvent] = useApplyEventMutation();
   const [acceptPlayer] = useAcceptPlayerMutation();
   const [rejectPlayer] = useRejectPlayerMutation();
@@ -30,7 +29,17 @@ const EventDetails = () => {
   const handleJoinClick = () => {
     applyEvent({ eventId, token })
       .unwrap()
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        const newWaitingList = [
+          ...eventInfo.waitingList,
+          { _id: user.userID, username: user.username },
+        ];
+        setEventInfo((prevState) => ({
+          ...prevState,
+          waitingList: newWaitingList,
+        }));
+      })
       .catch((error) => console.log(error));
   };
 
@@ -94,122 +103,118 @@ const EventDetails = () => {
   return (
     <Container maxWidth="md">
       <Typography variant="h3">{eventInfo?.name}</Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
+      <Box>
+        <Card variant="outlined">
+          <CardContent>
+            <Typography variant="h5">{eventInfo.description}</Typography>
+            <Typography variant="subtitle1" sx={{ mt: 2 }}>
+              Date and Time:{" "}
+              {new Date(eventInfo.timings).toLocaleString("en-US", {
+                dateStyle: "short",
+                timeStyle: "short",
+              })}
+            </Typography>
+            <Typography variant="subtitle1" sx={{ mt: 2 }}>
+              Organizer: {eventInfo?.organizer?.username}
+            </Typography>
+            <Typography variant="subtitle1" sx={{ mt: 2 }}>
+              Player Limit: {eventInfo?.playerLimit}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Box>
+      {/* Checking current user is the organizer */}
+      {eventInfo.organizer?._id === user.userID ? (
+        <Box>
           <Card variant="outlined">
             <CardContent>
-              <Typography variant="h5">{eventInfo.description}</Typography>
-              <Typography variant="subtitle1" sx={{ mt: 2 }}>
-                Date and Time:{" "}
-                {new Date(eventInfo.timings).toLocaleString("en-US", {
-                  dateStyle: "short",
-                  timeStyle: "short",
-                })}
-              </Typography>
-              <Typography variant="subtitle1" sx={{ mt: 2 }}>
-                Organizer: {eventInfo?.organizer?.username}
-              </Typography>
-              <Typography variant="subtitle1" sx={{ mt: 2 }}>
-                Player Limit: {eventInfo?.playerLimit}
-              </Typography>
+              <Typography variant="h5">Player List</Typography>
+              {eventInfo?.players?.map((player) => (
+                <Box
+                  key={player._id}
+                  sx={{
+                    backgroundColor: "primary.main",
+                    borderRadius: "7px",
+                  }}
+                >
+                  <Typography
+                    color={"white"}
+                    variant="subtitle1"
+                    sx={{ mt: 1 }}
+                  >
+                    {player.username}
+                  </Typography>
+                </Box>
+              ))}
+              {eventInfo?.waitingList?.length > 0 && (
+                <div>
+                  <Typography variant="subtitle1">Waiting List:</Typography>
+                  {eventInfo.waitingList.map((player) => (
+                    <Box
+                      key={player._id}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography variant="subtitle1" sx={{ m: 1 }}>
+                        {player.username}
+                      </Typography>
+                      <div>
+                        <Button
+                          onClick={() => handleAcceptClick(player._id)}
+                          variant="contained"
+                          size="small"
+                          color="success"
+                          sx={{ mx: 1 }}
+                        >
+                          Accept
+                        </Button>
+                        <Button
+                          onClick={() => handleRejectClick(player._id)}
+                          color="error"
+                          variant="contained"
+                          size="small"
+                          sx={{ mx: 1 }}
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    </Box>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
-        </Grid>
-        {/* If user is created the event */}
-        {/* {eventInfo?.organizer?._id === user?._id && ( */}
-        {true && (
-          <Grid item xs={12} md={6}>
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="h5">Player List</Typography>
-                {eventInfo?.players?.map((player) => (
-                  <Box
-                    key={player._id}
-                    sx={{
-                      backgroundColor: "primary.main",
-                      borderRadius: "7px",
-                    }}
-                  >
-                    <Typography
-                      color={"white"}
-                      variant="subtitle1"
-                      sx={{ mt: 1 }}
-                    >
-                      {player.username}
-                    </Typography>
-                  </Box>
-                ))}
-                {eventInfo?.waitingList?.length > 0 && (
-                  <div>
-                    <Typography variant="subtitle1">Waiting List:</Typography>
-                    {eventInfo.waitingList.map((player) => (
-                      <Box
-                        key={player._id}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <Typography variant="subtitle1" sx={{ m: 1 }}>
-                          {player.username}
-                        </Typography>
-                        <div>
-                          <Button
-                            onClick={() => handleAcceptClick(player._id)}
-                            variant="contained"
-                            size="small"
-                            color="success"
-                            sx={{ mx: 1 }}
-                          >
-                            Accept
-                          </Button>
-                          <Button
-                            onClick={() => handleRejectClick(player._id)}
-                            color="error"
-                            variant="contained"
-                            size="small"
-                            sx={{ mx: 1 }}
-                          >
-                            Reject
-                          </Button>
-                        </div>
-                      </Box>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
-        )}
-
-        {/* //If user is not created the event */}
-        {/* {eventInfo.organizer._id !== user._id && ( */}
-        {false && (
-          <Grid item xs={12} md={6}>
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="h5">Request to Join</Typography>
-                {/* if player is in list */}
-                {/* {eventInfo.players.find((player) => player._id === user._id) ? ( */}
-                {false ? (
-                  <Typography variant="subtitle1" sx={{ mt: 2 }}>
-                    You have already joined this event
-                  </Typography>
-                ) : (
-                  <Button
-                    onClick={handleJoinClick}
-                    variant="contained"
-                    size="small"
-                    sx={{ mt: 2 }}
-                  >
-                    Join Event
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
-        )}
-      </Grid>
+        </Box>
+      ) : (
+        <Box>
+          <Card variant="outlined">
+            <CardContent>
+              <Typography variant="h5">Request to Join</Typography>
+              {/* if player is in player or waiting list */}
+              {/* {eventInfo.players.find((player) => player._id === user._id) ? ( */}
+              {eventInfo.players.find((player) => player._id === user.userID) ||
+              eventInfo.waitingList.find(
+                (player) => player._id === user.userID
+              ) ? (
+                <Typography variant="subtitle1" sx={{ mt: 2 }}>
+                  You have already joined this event
+                </Typography>
+              ) : (
+                <Button
+                  onClick={handleJoinClick}
+                  variant="contained"
+                  size="small"
+                  sx={{ mt: 2 }}
+                >
+                  Join Event
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+        </Box>
+      )}
     </Container>
   );
 };
