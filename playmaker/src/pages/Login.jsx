@@ -13,7 +13,8 @@ const Login = () => {
       .unwrap()
       .then((res) => {
         alert(res.res);
-        dispatch(loginSuccess(res.token));
+        console.log(res);
+        dispatch(loginSuccess({ token: res.token, user: res.user }));
       })
       .catch((err) => alert(err.data.res));
   };
