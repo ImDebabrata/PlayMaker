@@ -121,6 +121,7 @@ const Events = () => {
               description={event.description}
               playerLimit={event.playerLimit}
               organizer={event.organizer.username}
+              organizer_id={event.organizer._id}
               timings={event.timings}
               id={event._id}
             />

@@ -13,14 +13,14 @@ import {
   Divider,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { logOutUser } from "../redux/authSlice";
 
 const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
-
   const { token } = useSelector((store) => store.auth);
-
+  const dispatch = useDispatch();
   const toggleDrawer = (open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -28,8 +28,11 @@ const Navbar = () => {
     ) {
       return;
     }
-
     setIsDrawerOpen(open);
+  };
+
+  const handleLogOut = () => {
+    dispatch(logOutUser());
   };
 
   return (
@@ -74,7 +77,9 @@ const Navbar = () => {
                 <Link to={"/logs"}>
                   <StyledButton color="inherit">Accept/Request</StyledButton>
                 </Link>
-                <StyledButton color="inherit">Logout</StyledButton>
+                <StyledButton onClick={handleLogOut} color="inherit">
+                  Logout
+                </StyledButton>
               </>
             )}
           </RowLinks>
@@ -113,7 +118,7 @@ const Navbar = () => {
                 </Link>
               </ListItem>
               <Divider />
-              <ListItem button>
+              <ListItem onClick={handleLogOut} button>
                 <ListItemText primary="Logout" />
               </ListItem>
             </>

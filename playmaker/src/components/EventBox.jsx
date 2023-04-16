@@ -2,10 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { Card, CardContent, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const StyledCard = styled(Card)`
   && {
     height: 100%;
+    border-top: ${(style) => style.borderVarient || "5px solid red"};
+    border-bottom: ${(style) => style.borderVarient || "5px solid red"};
   }
 `;
 
@@ -28,16 +31,22 @@ const EventBox = ({
   description,
   playerLimit,
   organizer,
+  organizer_id,
   timings,
   id,
 }) => {
+  const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const handleNavigate = () => {
-    console.log("clicking", id);
+    // console.log("clicking", id);
     navigate(`/events/${id}`);
   };
   return (
-    <StyledCard onClick={handleNavigate} variant="outlined">
+    <StyledCard
+      borderVarient={user.userID === organizer_id && "5px solid green"}
+      onClick={handleNavigate}
+      variant="outlined"
+    >
       <StyledCardContent>
         <StyledTypography gutterBottom variant="h6" component="div">
           {name}
@@ -47,6 +56,7 @@ const EventBox = ({
         </Typography>
         <Typography variant="subtitle1" sx={{ mt: "auto" }}>
           Organizer: {organizer}
+          {user.userID === organizer_id && " (Created By Me)"}
         </Typography>
         <Typography variant="subtitle1">Player Limit: {playerLimit}</Typography>
         <Typography variant="subtitle1">
