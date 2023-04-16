@@ -81,6 +81,15 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    //Accept and pending Events based on user id
+    applyEventLog: builder.query({
+      query: ({ userId, token }) => ({
+        url: `/event/user/${userId}`,
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -93,4 +102,5 @@ export const {
   useApplyEventMutation,
   useAcceptPlayerMutation,
   useRejectPlayerMutation,
+  useApplyEventLogQuery,
 } = apiSlice;

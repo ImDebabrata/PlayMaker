@@ -47,7 +47,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `;
 
-const EventGrid = styled(Grid)`
+export const EventGrid = styled(Grid)`
   && {
     margin-top: 16px;
 
