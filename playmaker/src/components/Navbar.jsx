@@ -59,7 +59,7 @@ const Navbar = () => {
               <>
                 {" "}
                 <Link to={"/"}>
-                  <StyledButton color="inherit">Link</StyledButton>
+                  <StyledButton color="inherit">Login</StyledButton>
                 </Link>
                 <Link to={"/register"}>
                   <StyledButton color="inherit">Signup</StyledButton>
@@ -75,7 +75,7 @@ const Navbar = () => {
                   <StyledButton color="inherit">Add Events</StyledButton>
                 </Link>
                 <Link to={"/logs"}>
-                  <StyledButton color="inherit">Accept/Request</StyledButton>
+                  <StyledButton color="inherit">Applied Logs</StyledButton>
                 </Link>
                 <StyledButton onClick={handleLogOut} color="inherit">
                   Logout
@@ -114,7 +114,7 @@ const Navbar = () => {
               </ListItem>
               <ListItem button>
                 <Link to={"/logs"}>
-                  <ListItemText primary="Accept/Request" />
+                  <ListItemText primary="Applied Logs" />
                 </Link>
               </ListItem>
               <Divider />
