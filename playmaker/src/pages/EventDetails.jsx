@@ -124,7 +124,7 @@ const EventDetails = () => {
         </Card>
       </Box>
       {/* Checking current user is the organizer */}
-      {eventInfo.organizer?._id === user.userID ? (
+      {eventInfo.organizer?._id === user?.userID ? (
         <Box>
           <Card variant="outlined">
             <CardContent>
@@ -194,9 +194,11 @@ const EventDetails = () => {
               <Typography variant="h5">Request to Join</Typography>
               {/* if player is in player or waiting list */}
               {/* {eventInfo.players.find((player) => player._id === user._id) ? ( */}
-              {eventInfo.players.find((player) => player._id === user.userID) ||
+              {eventInfo.players.find(
+                (player) => player._id === user?.userID
+              ) ||
               eventInfo.waitingList.find(
-                (player) => player._id === user.userID
+                (player) => player._id === user?.userID
               ) ? (
                 <Typography variant="subtitle1" sx={{ mt: 2 }}>
                   You have already joined this event
