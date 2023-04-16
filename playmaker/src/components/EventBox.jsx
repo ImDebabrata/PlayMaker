@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Card, CardContent, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const StyledCard = styled(Card)`
   && {
@@ -22,9 +23,21 @@ const StyledTypography = styled(Typography)`
   }
 `;
 
-const EventBox = ({ name, description, playerLimit, organizer, timings }) => {
+const EventBox = ({
+  name,
+  description,
+  playerLimit,
+  organizer,
+  timings,
+  id,
+}) => {
+  const navigate = useNavigate();
+  const handleNavigate = () => {
+    console.log("clicking", id);
+    navigate(`/events/${id}`);
+  };
   return (
-    <StyledCard variant="outlined">
+    <StyledCard onClick={handleNavigate} variant="outlined">
       <StyledCardContent>
         <StyledTypography gutterBottom variant="h6" component="div">
           {name}

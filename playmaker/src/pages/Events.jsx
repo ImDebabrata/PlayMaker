@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import EventBox from "../components/EventBox";
 import { useEventsQuery } from "../redux/apiSlice";
+import { useSelector } from "react-redux";
 
 const EventPageWrapper = styled.div`
   padding: 24px;
@@ -61,7 +62,8 @@ const EventGrid = styled(Grid)`
 `;
 
 const Events = () => {
-  const { data, isLoading, isError } = useEventsQuery();
+  const { token } = useSelector((store) => store.auth);
+  const { data, isLoading, isError } = useEventsQuery(token);
   const eventList = data?.events || [];
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("playerLimit");
@@ -120,6 +122,7 @@ const Events = () => {
               playerLimit={event.playerLimit}
               organizer={event.organizer.username}
               timings={event.timings}
+              id={event._id}
             />
           </Grid>
         ))}

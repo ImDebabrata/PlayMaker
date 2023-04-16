@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import baseUrl from "../../baseUrl";
+import { useSelector } from "react-redux";
 
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -23,16 +24,41 @@ export const apiSlice = createApi({
     }),
     //Get all events
     events: builder.query({
-      query: () => ({
+      query: (token) => ({
         url: "/event",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       }),
     }),
     //Create new event
     addEvents: builder.mutation({
-      query: (payload) => ({
+      query: (payload, token) => ({
         url: "/event",
         method: "POST",
         body: payload,
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
+    //Retrive Event by id
+    eventsById: builder.query({
+      query: ({ eventId, token }) => ({
+        url: `/event/${eventId}`,
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
+    //JoinEvent
+    applyEvent: builder.mutation({
+      query: ({ eventId, token }) => ({
+        url: `/event/${eventId}/apply`,
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       }),
     }),
   }),
@@ -43,4 +69,6 @@ export const {
   useLoginMutation,
   useEventsQuery,
   useAddEventsMutation,
+  useEventsByIdQuery,
+  useApplyEventMutation,
 } = apiSlice;
