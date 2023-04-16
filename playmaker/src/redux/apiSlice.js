@@ -61,6 +61,26 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    //Accept Player
+    acceptPlayer: builder.mutation({
+      query: ({ eventId, userId, token }) => ({
+        url: `/event/${eventId}/accept/${userId}`,
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
+    //Reject Player
+    rejectPlayer: builder.mutation({
+      query: ({ eventId, userId, token }) => ({
+        url: `/event/${eventId}/reject/${userId}`,
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -71,4 +91,6 @@ export const {
   useAddEventsMutation,
   useEventsByIdQuery,
   useApplyEventMutation,
+  useAcceptPlayerMutation,
+  useRejectPlayerMutation,
 } = apiSlice;
