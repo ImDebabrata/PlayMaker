@@ -41,7 +41,11 @@ const login = async (req, res) => {
           { username: isExist.username, userID: isExist._id },
           "webtoken"
         );
-        res.send({ res: `Hello ${isExist.username}`, token });
+        res.send({
+          res: `Hello ${isExist.username}`,
+          token,
+          user: { username: isExist.username, userID: isExist._id },
+        });
       } else {
         res.status(404).send({ res: "Password Incorrect" });
       }
